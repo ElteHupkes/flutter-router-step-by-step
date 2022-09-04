@@ -25,6 +25,7 @@ class _RouterGuideState extends State<RouterGuide> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      backButtonDispatcher: RootBackButtonDispatcher(),
       routeInformationParser: parser,
       routerDelegate: delegate,
       routeInformationProvider: PlatformRouteInformationProvider(

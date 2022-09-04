@@ -6,7 +6,12 @@ import '../posts/posts.dart';
 import '../posts/screens.dart';
 import '../welcome_screen.dart';
 
-class AppRouterDelegate extends RouterDelegate<AppState> with ChangeNotifier {
+class AppRouterDelegate extends RouterDelegate<AppState>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin {
+  @override
+  final GlobalKey<NavigatorState>? navigatorKey =
+      GlobalKey(debugLabel: "Root navigator");
+
   var _state = const AppState();
 
   @override
@@ -20,6 +25,7 @@ class AppRouterDelegate extends RouterDelegate<AppState> with ChangeNotifier {
   @override
   Widget build(BuildContext context) {
     return Navigator(
+      key: navigatorKey,
       onPopPage: _onPopPage,
       pages: [
         // The welcome screen is always there, at the bottom of the stack
@@ -66,17 +72,21 @@ class AppRouterDelegate extends RouterDelegate<AppState> with ChangeNotifier {
     }
 
     final name = route.settings.name;
+
     if (name == "post_details") {
+      // If we were in the post details page, return to the posts page
       changeAppState(const AppState(showPosts: true));
     } else if (name == "posts") {
+      // If we were in the posts page, return to the welcome page
       changeAppState(const AppState());
     }
 
     return true;
   }
 
-  @override
-  Future<bool> popRoute() {
-    return Future.value(false);
-  }
+  // We remove this method, the mixin provides its implementation now
+  // @override
+  // Future<bool> popRoute() {
+  //   return Future.value(false);
+  // }
 }
